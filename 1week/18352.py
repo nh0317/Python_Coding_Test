@@ -33,7 +33,7 @@ if __name__ =='__main__':
         if (distance[i] == min):
             result.append(i)
 
-    sorted(result)
+    result.sort()
     if not result:
         print(-1)
     else:
