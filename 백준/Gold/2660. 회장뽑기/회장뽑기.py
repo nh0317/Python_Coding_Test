@@ -3,6 +3,10 @@ import sys
 input = sys.stdin.readline
 
 def floyd(friends):
+    for i in range(N):
+        for j in range(N):
+            if i == j:
+                friends[i][j] = 0
     for k in range(N):
         for i in range(N):
             for j in range(N):
@@ -11,16 +15,16 @@ def floyd(friends):
                 friends[i][j] = min(friends[i][j], friends[i][k] + friends[k][j])
     return friends
 
-def cal_scores(friends):
-    scores = [0 for _ in range(N)]
-    for i,friend in enumerate(friends):
-        scores[i] = 0
-        for f in friend:
-            if f == float('inf'):
-                continue
-            if scores[i] < f:
-                scores[i] = f
-    return scores
+def pick(friends):
+    scores = [max(friends[i]) for i in range(len(friends))]
+    minn = min(scores)
+    picked = []
+
+    for i, score in enumerate(scores):
+        if score == minn:
+            picked.append(i+1)
+    picked.sort()
+    return minn, picked
 
 
 N = int(input())
@@ -32,19 +36,9 @@ while u != -1 and v != -1:
     friends[u-1][v-1] = 1
     friends[v-1][u-1] = 1
 
-scores = cal_scores(floyd(friends))
+minn, candidate = pick(floyd(friends))
 
-minn = min(scores)
-candidate = []
-
-cnt = 0
-for i, score in enumerate(scores):
-    if score == minn:
-        candidate.append(i)
-        cnt += 1
-candidate.sort()
-
-print(minn, cnt)
+print(minn, len(candidate))
 for c in candidate:
-    print(c+1, end=" ")
+    print(c, end=" ")
 
