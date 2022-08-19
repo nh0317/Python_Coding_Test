@@ -12,9 +12,8 @@ def draw(y, x, n, d):
     curvs = []
     dydx = [[0, 1], [-1, 0], [0, -1], [1, 0]]
     ny, nx = y + dydx[d][0], x + dydx[d][1]
-    if 0 <= ny < 101 and 0 <= nx < 101:
-        visited[ny][nx] = True
-        curvs.append(d)
+    visited[ny][nx] = True
+    curvs.append(d)
 
     nextt = []
     nextt.extend(curvs)
@@ -23,9 +22,8 @@ def draw(y, x, n, d):
             di = curvs.pop()
             nd = (di + 1) % 4
             ny, nx = ny + dydx[nd][0], nx + dydx[nd][1]
-            if 0 <= ny < 101 and 0 <= nx < 101:
-                visited[ny][nx] = True
-                nextt.append(nd)
+            visited[ny][nx] = True
+            nextt.append(nd)
         curvs.extend(nextt)
 
 for _ in range(N):
