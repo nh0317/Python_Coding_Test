@@ -1,16 +1,8 @@
 import sys
-import copy
 
 input = sys.stdin.readline
 
 N = int(input())
-
-def print_arr(arr):
-    for a in arr:
-        for aa in a:
-            print(aa, end=" ")
-        print()
-    print()
 
 sand = []
 mapp = [[] for _ in range(N)]
@@ -20,7 +12,7 @@ for i in range(N):
         if r > 0:
             sand.append([r,i,j])
     mapp[i].extend(row)
-# print(mapp)
+
 y, x = N//2, N//2
 dydx = [[0,-1],[1,0],[0,1],[-1,0]]
 d = 0
@@ -29,9 +21,6 @@ summ = 0
 while 0<= y < N and 0<= x < N:
     for _ in range(cnt):
         y, x = y+dydx[d][0], x +dydx[d][1]
-
-        # print(y,x)
-
 
         s = 0
         out = 0
@@ -76,8 +65,7 @@ while 0<= y < N and 0<= x < N:
             else:
                 out += mapp[y][x] - s - out
                 mapp[y][x] = 0
-        # print(out, sum(map(sum, mapp)))
-        # print_arr(mapp)
+
         summ += out
 
     d = (d + 1) % 4
