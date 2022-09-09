@@ -1,36 +1,47 @@
 from collections import deque
 
 visited = []
+
+def check(y,x, board):
+    global visited
+    q = deque()
+    check = 0
+    cnt = 0
+    for dy, dx in [[0,1],[1,0],[1,1]]:
+        ny, nx = y+dy, x+dx
+        if 0<= ny < len(board) and 0<= nx < len(board[0]):
+            if not visited[ny][nx] and board[y][x] == board[ny][nx]:
+                check += 1
+    return check == 3
+
+def check2(y,x, board):
+    global visited
+    q = deque()
+    check = 0
+    cnt = 0
+    for dy, dx in [[0,1],[1,0],[1,1]]:
+        ny, nx = y+dy, x+dx
+        if 0<= ny < len(board) and 0<= nx < len(board[0]):
+            if board[y][x] == board[ny][nx]:
+                check += 1
+    return check == 3
+    
 def bfs(i,j, board):
     global visited
     q = deque()
-    
     cnt = 0
-    check = 0
-    for dy, dx in [[0,1],[1,0],[1,1]]:
-            ny, nx = i+dy, j+dx
-            if 0<= ny < len(board) and 0<= nx < len(board[0]):
-                if not visited[ny][nx] and board[i][j] == board[ny][nx]:
-                    check += 1
-    if check == 3:
+    if check(i,j,board):
         cnt += 4
         q.append([i, j])
         visited[i][j] = True
-        if 0 <= ny < len(board) and 0 <= nx < len(board[0]):
-            for dy, dx in [[0,1],[1,0],[1,1]]:
-                ny, nx = i+dy, j+dx
-                q.append([ny, nx])
-                visited[ny][nx] = True
+        for dy, dx in [[0,1],[1,0],[1,1]]:
+            ny, nx = i+dy, j+dx
+            q.append([ny, nx])
+            visited[ny][nx] = True
+    
     while q:
         y,x = q.popleft()
-        check = 0
-        for dy, dx in [[0,1],[1,0],[1,1]]:
-            ny, nx = y+dy, x+dx
-            if 0<= ny < len(board) and 0<= nx < len(board[0]):
-                if board[i][j] == board[ny][nx]:
-                    check += 1
-                    
-        if check == 3:
+        if check2(y,x,board):
             for dy, dx in [[0,1],[1,0],[1,1]]:
                 ny, nx = y+dy, x+dx
                 if 0 <= ny < len(board) and 0 <= nx < len(board[0]):
@@ -70,7 +81,6 @@ def solution(m, n, board):
             for j in range(len(board[0])):
                 if not visited[i][j]:
                     cnt= bfs(i,j,board)
-                        
                     answer += cnt
                     check += cnt
         board=move(board)
