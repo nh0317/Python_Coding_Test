@@ -1,39 +1,30 @@
+import datetime
 import heapq
+# import time
 
-def convert(time):
-    h, m = map(int, time.split(":"))
-    m += h * 60
-    return m
 
-def format_time(h):
-    if h < 10:
-        h = '0'+str(h)
-    else: h = str(h)
-    return h 
-
-def str_convert(m):
-    h = m // 60
-    m = m % 60
-    return ':'.join([format_time(h),format_time(m)])
-    
 def solution(n, t, m, timetable):
+    answer = ''
     times = []
-    for time in timetable:
-        time = convert(time)
-        heapq.heappush(times, time)
-        
-    start = convert("09:00")
+    for T in timetable:
+        hour, minute =map(int, T.split(":"))
+        heapq.heappush(times, datetime.datetime.strptime(T,"%H:%M"))
+        # times.append(datetime.time(hour, minute))
+    
+    startTime = datetime.datetime.strptime("09:00","%H:%M")
     for i in range(n):
-        capa = m
-        last = start
-        
-        while times and capa > 0 and times[0] <= start:
-            last = heapq.heappop(times)
-            capa -= 1
-        
-        start+=t
-        
-    if capa == 0:
-        return str_convert(last-1)
-    else: 
-        return str_convert(start-t)
+        capa=m
+        lastTime = startTime
+        if i != 0:
+            startTime = startTime + datetime.timedelta(minutes=t)
+        for j in range(m):
+            if ( times and startTime >= times[0]):
+                lastTime = heapq.heappop(times)
+                capa -= 1
+            if i==n-1 and capa==0:
+                lastTime = lastTime - datetime.timedelta(minutes=1)
+                answer = lastTime.strftime("%H:%M")
+            elif i==n-1 and capa>0:
+                answer = startTime.strftime("%H:%M")
+    
+    return answer
