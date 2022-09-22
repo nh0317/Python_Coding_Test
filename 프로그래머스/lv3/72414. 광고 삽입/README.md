@@ -1,10 +1,10 @@
 # [level 3] 광고 삽입 - 72414 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/72414?language=python3) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/72414?language=kotlin) 
 
 ### 성능 요약
 
-메모리: 14.8 MB, 시간: 53.29 ms
+메모리: 70.1 MB, 시간: 49.19 ms
 
 ### 구분
 
