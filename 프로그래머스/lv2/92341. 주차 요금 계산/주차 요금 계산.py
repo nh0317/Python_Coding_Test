@@ -1,5 +1,14 @@
+from collections import defaultdict
 import itertools
 import math
+
+def cal_fee(time, fee):
+    money = fee[1]
+    if time > fee[0]:
+        time -= fee[0]
+        money += math.ceil(time / fee[2]) * fee[3]
+    
+    return money
 
 def convert(time):
     h, m = map(int, time.split(":"))
@@ -10,28 +19,23 @@ def solution(fees, records):
     answer = []
     
     infos = []
+    cars = defaultdict(list)
     for record in records:
-        infos.append(record.split(" "))
+        r = record.split(" ")
+        if not cars[r[1]]: cars[r[1]] = [0,False]
         
+        if r[2] == "IN":
+            cars[r[1]][0] -= convert(r[0])
+            cars[r[1]][1] = False
+            
+        elif r[2] == "OUT":
+            cars[r[1]][0] += convert(r[0])
+            cars[r[1]][1] = True
     
-    records = itertools.groupby(sorted(infos, key=lambda x:x[1]),key=lambda x: x[1])
-    records = {k:list(g) for k, g in records}
-    records = dict(sorted(records.items()))
-    
-    for key in records.keys():
-        n = len(records[key])
-        record = records[key]
-        ins = [convert(record[i][0]) for i in range(0,n,2)]
-        outs = [convert(record[i][0]) for i in range(1,n,2)]
-        if n % 2 == 1:
-            outs.append(convert("23:59"))
-        time = sum([b-a for a, b in zip(ins, outs)])
+    cars = dict(sorted(cars.items()))
+    for key in cars.keys():
+        if not cars[key][1]:
+            cars[key][0] += convert("23:59")
         
-        m = fees[1]
-        if time > fees[0]:
-            time -= fees[0]
-            m += math.ceil(time / fees[2]) * fees[3]
-        answer.append(m)
-        
-        
+        answer.append(cal_fee(cars[key][0], fees))
     return answer
